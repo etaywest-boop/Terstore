@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TERSTORE — מערכת ההפעלה של הציוויליזציה</title>
+<meta name="description" content="שבע דיוויזיות. מכונה אחת. TERSTORE בונה את התשתית של המאה הבאה — AI, אנרגיה, רובוטיקה, רפואה, חלל.">
+<style>
+  :root {
+    --bg: #06070d;
+    --bg-card: #0d0f1a;
+    --border: #1c2030;
+    --text: #e8eaf2;
+    --text-dim: #8a90a8;
+    --accent: #5b8cff;
+    --accent2: #9d6bff;
+    --glow: rgba(91, 140, 255, 0.35);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", "Heebo", "Arial Hebrew", Arial, sans-serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  a { color: var(--accent); text-decoration: none; }
+
+  /* ---------- NAV ---------- */
+  nav {
+    position: fixed; top: 0; right: 0; left: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 6vw;
+    background: rgba(6, 7, 13, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-size: 1.4rem; font-weight: 800; letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  nav .links a { color: var(--text-dim); margin-inline-start: 28px; font-size: 0.95rem; transition: color .2s; }
+  nav .links a:hover { color: var(--text); }
+  @media (max-width: 700px) { nav .links { display: none; } }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 120px 6vw 80px;
+    position: relative;
+  }
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 20%, rgba(91,140,255,0.12), transparent),
+      radial-gradient(ellipse 50% 35% at 70% 80%, rgba(157,107,255,0.08), transparent);
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 7vw, 5rem);
+    font-weight: 900; letter-spacing: 4px; line-height: 1.15;
+    background: linear-gradient(120deg, #fff 30%, var(--accent) 70%, var(--accent2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero .tagline {
+    margin-top: 24px; font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+    color: var(--text-dim); max-width: 720px;
+  }
+  .hero .tagline strong { color: var(--text); }
+  .cta-row { margin-top: 44px; display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  .btn {
+    padding: 14px 36px; border-radius: 10px; font-size: 1.05rem; font-weight: 700;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .btn-primary {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    color: #fff; box-shadow: 0 0 30px var(--glow);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px var(--glow); }
+  .btn-ghost { border: 1px solid var(--border); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--accent); }
+
+  /* ---------- STATS ---------- */
+  .stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1px; background: var(--border); border-block: 1px solid var(--border);
+  }
+  .stat { background: var(--bg); padding: 36px 20px; text-align: center; }
+  .stat .num {
+    font-size: 2.2rem; font-weight: 900;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .stat .label { color: var(--text-dim); font-size: 0.92rem; margin-top: 6px; }
+
+  /* ---------- SECTIONS ---------- */
+  section { padding: 90px 6vw; max-width: 1200px; margin-inline: auto; }
+  .section-title { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 12px; }
+  .section-sub { color: var(--text-dim); max-width: 640px; margin-bottom: 50px; font-size: 1.05rem; }
+
+  /* ---------- DIVISIONS ---------- */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 30px 26px; transition: transform .2s, border-color .2s;
+    position: relative; overflow: hidden;
+  }
+  .card:hover { transform: translateY(-4px); border-color: var(--accent); }
+  .card .icon { font-size: 2rem; }
+  .card h3 { margin: 14px 0 4px; font-size: 1.25rem; }
+  .card .sub { color: var(--accent); font-size: 0.88rem; font-weight: 600; margin-bottom: 12px; }
+  .card p { color: var(--text-dim); font-size: 0.95rem; }
+  .card .market {
+    margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border);
+    font-size: 0.85rem; color: var(--text-dim);
+  }
+  .card .market b { color: var(--text); }
+
+  /* ---------- FLYWHEEL ---------- */
+  .flywheel {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px;
+    padding: 44px 6vw; text-align: center;
+  }
+  .flywheel-steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 30px; }
+  .fw-step {
+    padding: 12px 20px; border: 1px solid var(--border); border-radius: 999px;
+    color: var(--text-dim); font-size: 0.92rem; display: flex; align-items: center; gap: 8px;
+  }
+  .fw-step b { color: var(--text); }
+  .fw-arrow { color: var(--accent); font-size: 1.2rem; align-self: center; }
+
+  /* ---------- ROADMAP ---------- */
+  .timeline { border-inline-start: 2px solid var(--border); padding-inline-start: 32px; }
+  .tl-item { position: relative; padding-bottom: 36px; }
+  .tl-item::before {
+    content: ""; position: absolute; inset-inline-start: -41px; top: 6px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--bg); border: 3px solid var(--accent);
+  }
+  .tl-item .year { color: var(--accent); font-weight: 800; font-size: 0.95rem; }
+  .tl-item h4 { font-size: 1.15rem; margin: 4px 0; }
+  .tl-item p { color: var(--text-dim); font-size: 0.95rem; }
+
+  /* ---------- DEMO ---------- */
+  .demo-box {
+    background: #0a0c14; border: 1px solid var(--border); border-radius: 14px;
+    padding: 28px; font-family: "Consolas", monospace; direction: ltr; text-align: left;
+    font-size: 0.88rem; color: #9ecbff; overflow-x: auto;
+  }
+  .demo-box .c { color: #5d6577; }
+  .demo-box .g { color: #7ee29a; }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    border-top: 1px solid var(--border); padding: 50px 6vw; text-align: center;
+    color: var(--text-dim); font-size: 0.9rem;
+  }
+  footer .logo { font-size: 1.2rem; display: block; margin-bottom: 12px; }
+
+  .fade { animation: fadeUp .8s ease both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">TERSTORE</span>
+  <span class="links">
+    <a href="#divisions">הדיוויזיות</a>
+    <a href="#flywheel">הפלייוויל</a>
+    <a href="#roadmap">מפת הדרכים</a>
+    <a href="#demo">דמו חי</a>
+  </span>
+</nav>
+
+<header class="hero">
+  <h1 class="fade">TERSTORE</h1>
+  <p class="tagline fade">
+    <strong>מערכת ההפעלה של הציוויליזציה האנושית.</strong><br>
+    שבע דיוויזיות משולבות — בינה מלאכותית, אריכות חיים, רובוטיקה, פיוזן,
+    ענן ריבוני, רפואה אוטונומית וכלכלת החלל — מכונה אחת שאי אפשר לשכפל.
+  </p>
+  <div class="cta-row fade">
+    <a class="btn btn-primary" href="#divisions">גלה את החזון</a>
+    <a class="btn btn-ghost" href="#demo">ראה את הקוד</a>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="stat"><div class="num">7</div><div class="label">דיוויזיות משולבות</div></div>
+  <div class="stat"><div class="num">$320B</div><div class="label">יעד הכנסה שנתית — שנה 7</div></div>
+  <div class="stat"><div class="num">$5T</div><div class="label">יעד שווי — שנה 7</div></div>
+  <div class="stat"><div class="num">$40T</div><div class="label">שוק הרובוטיקה לבדו (Nvidia)</div></div>
+</div>
+
+<section id="divisions">
+  <h2 class="section-title">שבע דיוויזיות. מכונה אחת.</h2>
+  <p class="section-sub">כל דיוויזיה היא עסק של מאות מיליארדים בפני עצמה. ביחד — לולאה סגורה שאף מתחרה לא יכול להיכנס אליה.</p>
+  <div class="grid">
+    <div class="card">
+      <div class="icon">🧠</div>
+      <h3>TERSTORE INTELLIGENCE</h3>
+      <div class="sub">מערכת ההפעלה של ה-AGI</div>
+      <p>התשתית שכל ארגון צריך כדי לפרוס סוכני AI אוטונומיים — הרצה, זיכרון, תיאום, ודוחות compliance מלאים לרגולטור.</p>
+      <div class="market">שוק: <b>$52B עד 2030</b> · צמיחה 45% בשנה</div>
+    </div>
+    <div class="card">
+      <div class="icon">🧬</div>
+      <h3>TERSTORE LIFE</h3>
+      <div class="sub">היפוך הזדקנות ביולוגית</div>
+      <p>החברה הראשונה שמוכרת היפוך גיל ביולוגי כמוצר: תכנות תאים מחדש, ניקוי תאים מזדקנים, וניטור גיל ביולוגי רציף.</p>
+      <div class="market">שוק: <b>$8T בריאות גלובלית</b> · אפס מתחרים עם מוצר</div>
+    </div>
+    <div class="card">
+      <div class="icon">🤖</div>
+      <h3>TERSTORE ROBOTICS</h3>
+      <div class="sub">ה-Android של הרובוטים</div>
+      <p>לא עוד יצרן חומרה — מודל הבסיס ומערכת ההפעלה שכל רובוט הומנואידי בעולם ירוץ עליהם. הנתונים משתפרים עם כל שעת עבודה.</p>
+      <div class="market">שוק: <b>$40T</b> לפי Jensen Huang, Nvidia</div>
+    </div>
+    <div class="card">
+      <div class="icon">⚡</div>
+      <h3>TERSTORE ENERGY</h3>
+      <div class="sub">אנרגיית פיוזן כשירות</div>
+      <p>כורים קומפקטיים סטנדרטיים + חוזי אנרגיה ל-20 שנה. אנרגיה אינסופית, נקייה, שזמינה 24/7 — נמכרת כמו ענן.</p>
+      <div class="market">שוק: <b>$10T/שנה</b> אנרגיה גלובלית</div>
+    </div>
+    <div class="card">
+      <div class="icon">☁️</div>
+      <h3>TERSTORE COMPUTE</h3>
+      <div class="sub">הענן הניטרלי של העולם</div>
+      <p>מחשוב-על ל-AI בתחומי שיפוט ניטרליים — איסלנד, סינגפור, שווייץ. לא אמריקאי, לא סיני. ל-6 מיליארד אנשים שצריכים צד שלישי.</p>
+      <div class="market">שוק: <b>$1T ענן עד 2028</b> · 10% נתח ריבוני</div>
+    </div>
+    <div class="card">
+      <div class="icon">💊</div>
+      <h3>TERSTORE MEDICINE</h3>
+      <div class="sub">תרופות במהירות תוכנה</div>
+      <p>AI שמגלה תרופות מקצה לקצה: מטרה → מולקולה → ניסוי → אישור. מ-12 שנים ו-$2.6 מיליארד ל-18 חודשים ו-$50 מיליון.</p>
+      <div class="market">שוק: <b>$1.5T/שנה</b> פארמה גלובלית</div>
+    </div>
+    <div class="card">
+      <div class="icon">🚀</div>
+      <h3>TERSTORE SPACE</h3>
+      <div class="sub">נמל הכלכלה המסלולית</div>
+      <p>SpaceX בנתה את הספינות. אנחנו בונים את הנמל: תדלוק לוויינים, ייצור באפס כבידה, ופרוטוקול העגינה שיהיה הסטנדרט של החלל.</p>
+      <div class="market">שוק: <b>$1T כלכלת חלל עד 2034</b></div>
+    </div>
+  </div>
+</section>
+
+<section id="flywheel">
+  <div class="flywheel">
+    <h2 class="section-title">הפלייוויל</h2>
+    <p class="section-sub" style="margin-inline:auto">הסוד הוא לא הדיוויזיות — אלא מה שקורה ביניהן. כל שכבה מוזילה ומאיצה את הבאה, לנצח.</p>
+    <div class="flywheel-steps">
+      <span class="fw-step">⚡ <b>פיוזן</b> מוזיל חשמל פי 35</span>
+      <span class="fw-arrow">←</span>
+      <span class="fw-step">☁️ <b>הענן</b> רץ כמעט בחינם</span>
+      <span class="fw-arrow">←</span>
+      <span class="fw-step">🧠 <b>ה-AGI OS</b> חושב בזול</span>
+      <span class="fw-arrow">←</span>
+      <span class="fw-step">🤖 <b>הרובוטים</b> נהיים חכמים</span>
+      <span class="fw-arrow">←</span>
+      <span class="fw-step">⚡ ובונים <b>עוד כורים</b></span>
+    </div>
+  </div>
+</section>
+
+<section id="roadmap">
+  <h2 class="section-title">מפת הדרכים</h2>
+  <p class="section-sub">לא בונים הכל בבת אחת. כל דיוויזיה מממנת ומאיצה את הבאה.</p>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="year">שנה 1</div>
+      <h4>🧠 INTELLIGENCE עולה לאוויר</h4>
+      <p>פלטפורמת סוכני ה-AI. 100 לקוחות ארגוניים. ההכנסה הראשונה שמממנת הכל.</p>
+    </div>
+    <div class="tl-item">
+      <div class="year">שנה 2</div>
+      <h4>🧬 LIFE נפתחת בסינגפור ובאיחוד האמירויות</h4>
+      <p>פרוטוקול אריכות החיים הראשון בעולם שנמכר כמוצר.</p>
+    </div>
+    <div class="tl-item">
+      <div class="year">שנה 3</div>
+      <h4>🤖 ROBOTICS חותמת עם יצרני חומרה</h4>
+      <p>TERBODY מורשה ל-3 יצרנים. 100,000 רובוטים על הפלטפורמה.</p>
+    </div>
+    <div class="tl-item">
+      <div class="year">שנים 4–5</div>
+      <h4>☁️💊 COMPUTE + MEDICINE</h4>
+      <p>מרכזי נתונים ריבוניים. התרופה הראשונה שגילה AI נכנסת לניסוי קליני.</p>
+    </div>
+    <div class="tl-item">
+      <div class="year">שנים 6–7</div>
+      <h4>⚡ הכור הראשון + הנפקה</h4>
+      <p>פיוזן מתחיל להזין את הענן. IPO בשווי $2T+.</p>
+    </div>
+    <div class="tl-item">
+      <div class="year">שנים 8–10</div>
+      <h4>🚀 SPACE — הנמל המסלולי הראשון</h4>
+      <p>רשת תדלוק וייצור בחלל. TERSTORE הופכת לחברה היקרה בהיסטוריה.</p>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <h2 class="section-title">זה לא רק חזון. הקוד כבר רץ.</h2>
+  <p class="section-sub">הגרסה הראשונה של TERSTORE INTELLIGENCE — סוכן שמתכנן, מבצע, ושומר דוח ביקורת מלא של כל צעד — זמינה כבר עכשיו ב-repo.</p>
+  <div class="demo-box">
+<span class="c"># TERSTORE INTELLIGENCE — MVP v0.1</span><br>
+$ python terstore_agent.py <span class="g">"סכם לי מה זה מחשוב קוונטי"</span><br><br>
+--- תוכנית ---<br>
+1. הגדר מהו קיוביט<br>
+2. הסבר סופרפוזיציה ושזירה<br>
+3. סכם למה זה חשוב<br><br>
+--- תוצאה ---<br>
+<span class="c">(הסוכן מבצע את המשימה...)</span><br><br>
+<span class="g">[TERAUDIT] דוח מלא נשמר ב-audit_log.json (3 אירועים)</span>
+  </div>
+  <div class="cta-row" style="justify-content:flex-start">
+    <a class="btn btn-primary" href="https://github.com/etaywest-boop/Terstore" target="_blank" rel="noopener">לקוד ב-GitHub ←</a>
+  </div>
+</section>
+
+<footer>
+  <span class="logo">TERSTORE</span>
+  מערכת ההפעלה של הציוויליזציה · נוסדה 2026<br>
+  <span style="font-size:0.8rem">"אם תבנה את זה בשביל הציוויליזציה — הציוויליזציה תשלם לך על זה."</span>
+</footer>
+
+</body>
+</html>
